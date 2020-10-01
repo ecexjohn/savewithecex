@@ -1,0 +1,37 @@
+import { withDependencies } from '@wix/thunderbolt-ioc'
+import { TpaHandlerExtras, TpaHandlerProvider } from '@wix/thunderbolt-symbols'
+import { TpaModalSymbol, TpaPopupSymbol } from '../symbols'
+import { ITpaModal, ITpaPopup, OpenPopupOptions } from '../types'
+
+export type MessageData = { url: string } & OpenPopupOptions
+
+export const OpenPopupHandler = withDependencies(
+	[TpaPopupSymbol, TpaModalSymbol],
+	({ openPopup }: ITpaPopup, tpaModal: ITpaModal): TpaHandlerProvider => {
+		const isAllowedToOpenPopup = (compId: string): Error | null => {
+			if (tpaModal.isModal(compId)) {
+				const err = new Error('An app can not open a popup from a modal.')
+				err.name = 'Operation not supported'
+				return err
+			}
+			return null
+		}
+
+		return {
+			getTpaHandlers() {
+				return {
+					openPopup(compId, { url, ...options }: MessageData, { originCompId }: TpaHandlerExtras) {
+						const error = isAllowedToOpenPopup(compId)
+						return error ? Promise.reject(error) : openPopup(url, options, originCompId)
+					},
+					openPersistentPopup(compId, { url, ...options }: MessageData, { originCompId }: TpaHandlerExtras) {
+						const error = isAllowedToOpenPopup(compId)
+						return error
+							? Promise.reject(error)
+							: openPopup(url, { ...options, persistent: true }, originCompId)
+					},
+				}
+			},
+		}
+	}
+)

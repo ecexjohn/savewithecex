@@ -1,0 +1,16 @@
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+import * as React from "react";
+
+var _ref = /*#__PURE__*/React.createElement("path", {
+  d: "M33.5 0l-.7.7L37.1 5H0v1h37.1l-4.3 4.3.7.7L39 5.5z"
+});
+
+function SvgLongArrow(props) {
+  return /*#__PURE__*/React.createElement("svg", _extends({
+    viewBox: "0 0 39 11"
+  }, props), _ref);
+}
+
+export default "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 39 11'%3E %3Cpath d='M33.5 0l-.7.7L37.1 5H0v1h37.1l-4.3 4.3.7.7L39 5.5z'/%3E %3C/svg%3E";
+export { SvgLongArrow as ReactComponent };
